@@ -56,6 +56,14 @@ class App extends Component {
           title: "LooChat",
           description: "Messaging/Video Chat app",
           body: `
+          <a 
+            href="https://loochat.herokuapp.com" 
+            rel="noopener noreferrer"
+            target="_blank"
+            id="git-link"
+          >
+            https://loochat.herokuapp.com
+          </a>
           • Developed a P2P chat application that handles messages and video calls using Socket.io and WebRTC <br />
           • Built web and mobile clients in React/React Native + Redux, paired with a Node/Express RESTful API <br />
           • Implemented JWT token authentication
