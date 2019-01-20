@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
-import ReactDOM from 'react-dom';
 
 class Scene extends Component {
   constructor(props, context) {
@@ -54,6 +53,7 @@ class Scene extends Component {
     for (let i = 0; i < this.particleCount; i++) {
       this.particles[i] = (
         <mesh 
+          key={i}
           ref={(particle) => {this.particleRefs.push(particle);
             this.particleRefs[i].direction = {
               x:1,
@@ -110,8 +110,6 @@ class Scene extends Component {
   render() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-
-    const objects = [];
   
     return (
       <div id="canvas">
