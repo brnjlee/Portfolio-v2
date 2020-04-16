@@ -8,19 +8,25 @@ class Scene extends Component {
     super(props, context);
 
     this.cameraPosition = new THREE.Vector3(0,0,50);
-    this.particleCount = 5000;
+    this.particleCount = 100;
     this.particles = [];
     this.particleRefs = [];
     this.mouseX = 0;
     this.mouseY = 0;
-
+    this.gyroX = 0;
+    this.gyroY = 0;
     this.state = {
       update: 0
     };
 
     this._onAnimate = () => {
-      this.camera.position.x -= (this.mouseX/10 + this.camera.position.x+10) * 0.05;
-      this.camera.position.y -= -(this.mouseY/10 - this.camera.position.y) * 0.05;
+      if (this.props.isMobile) {
+        this.camera.position.x = (this.gyroY);
+        this.camera.position.y = -(this.gyroX);
+      } else {
+        this.camera.position.x -= (this.mouseX/30 + this.camera.position.x+10) * 0.05;
+        this.camera.position.y -= -(this.mouseY/30 - this.camera.position.y) * 0.05;
+      }
       this.camera.lookAt(this.scene.position);
 
       for (let i = 0; i < this.particleCount; i++) {
@@ -47,8 +53,14 @@ class Scene extends Component {
 
       }
     }
-    let particleGeometry = <sphereGeometry radius={2} widthSegments={20} heightSegments={20}/>;
-    let particleMaterial = <meshBasicMaterial color={0xf05f40} opacity={0.5} transparent={true} />;
+    let particleGeometry = <sphereGeometry radius={20} widthSegments={20} heightSegments={20}/>;
+    let particleColors = [
+      0xf05f40,
+      0x405FF0,
+      0x5F40F0,
+      0xffff00,
+      0x33cc33
+    ];
 
     for (let i = 0; i < this.particleCount; i++) {
       this.particles[i] = (
@@ -64,12 +76,12 @@ class Scene extends Component {
             new THREE.Vector3( 
               Math.random() * window.innerWidth * 2 - window.innerWidth, 
               Math.random() * window.innerHeight * 2 - window.innerHeight,
-              Math.random() * window.innerWidth * 2 - window.innerWidth
+              -Math.random() * 700
             )
           }
         >
          {particleGeometry}
-         {particleMaterial}
+         <meshBasicMaterial color={particleColors[Math.floor(Math.random() * 5)]} opacity={0.5} transparent={true} />
         </mesh>
       );
     }
@@ -79,12 +91,20 @@ class Scene extends Component {
     // window.addEventListener('wheel', this.handleScroll, false);
     window.addEventListener('resize', this.onWindowResize, false);
     document.addEventListener('mousemove', this.handleMouseMove, false);
+    if (this.props.isMobile) {
+      window.addEventListener('deviceorientation', this.handleOrientation);
+    }
   }
 
   componentWillUnmount() {
     // window.removeEventListener('wheel', this.handleScroll);
     window.removeEventListener('resize', this.onWindowResize);
     document.removeEventListener('mousemove', this.handleMouseMove);
+  }
+
+  handleOrientation = (e) => {
+    this.gyroX = e.beta;
+    this.gyroY = e.gamma;
   }
 
   onWindowResize = () => {
@@ -135,10 +155,6 @@ class Scene extends Component {
               position={this.cameraPosition}
             />
             {this.particles}
-            {/*<mesh>
-              <sphereGeometry radius={10} widthSegments={15} heightSegments={8}/>
-              <meshLambertMaterial color={0xFFFFFF} wireframe={true} />
-            </mesh>*/}
             <ambientLight intensity={.8} />
             
           </scene>

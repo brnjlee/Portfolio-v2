@@ -1,11 +1,14 @@
 body {
 	margin: 0;
 	padding: 0;
-	font-family: montserrat, sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+	"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+	sans-serif;
 	background-color: #080808;
 	font-style: normal;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	overflow: hidden;
 }
 
 code {
@@ -37,18 +40,26 @@ code {
 
 #icon-container {
 	position: absolute;
-	top: 50%;
-	margin-top: -80px;
-	right: 17%;
-	margin-right: -90px;
+	top: calc(50% + 70px);
+	left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	z-index: 2;
 }
 #mobile-icon-container {
-	position: relative;
+	position: absolute;
+	top: calc(50% + 150px);
+	left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	z-index: 2;
 }
 
@@ -69,16 +80,12 @@ code {
 
 .icon:hover {
 	background-color: white;
-	-ms-transform: scale(1.2, 1.2 ); /* IE 9 */
-	-webkit-transform: scale(1.2,1.2 ); /* Safari */
-	transform: scale(1.2, 1.2);
+	transform: translateY(-3px);
 	color: black;
 }
 
 
 #canvas {
-	position: fixed;
-	top: 0;
 }
 
 #master-wrapper {
@@ -87,15 +94,28 @@ code {
 
 #header-main {
 	position: absolute;
-	left: 15%;
-	font-size: 40px;
+	left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto;
 	top: 50%;
 	margin-top: -100px;
 	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 #name {
-	color: #f05f40;
+	color: #ffffff;
+    font-weight: bolder;
+    font-size: 106px;
+}
+
+#name-mobile {
+	color: #ffffff;
+    font-weight: bolder;
+    font-size: 70px;
 }
 
 #header-secondary {
@@ -107,9 +127,7 @@ code {
 }
 
 #body {
-	position: absolute;
 	width: 100vw;
-	height: 90vh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -117,10 +135,7 @@ code {
 	color: white;
 }
 #mobile-body {
-	position: absolute;
 	width: 100vw;
-	height: 90vh;
-	margin-top: 100vh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

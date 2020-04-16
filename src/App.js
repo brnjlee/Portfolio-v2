@@ -6,7 +6,6 @@ import { FiGithub, FiLinkedin, FiFileText } from "react-icons/fi";
 import resume from './assets/resume.pdf';
 
 import Scene from './components/Scene';
-import Card from './components/Card';
 
 class App extends Component {
   constructor() {
@@ -120,47 +119,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if(!this.isMobile){
       this.authenticate().then(() => {
         const ele = document.getElementById('loading-screen')
         if(ele){
-          // fade out
-          ele.classList.add('available')
-          this.headerTween.restart();
-
-          setTimeout(() => {
-            // remove from DOM
-            ele.outerHTML = '';
-          }, 2000)
-        }
-      })
-    
-      window.addEventListener('wheel', this.handleScroll, false);
-      this.headerTween = new TimelineMax({paused: false})
-        .to( this.cards, 0, {autoAlpha: 0})
-        .from(this.headerMain, 0.7, {autoAlpha:0, y: 50})
-        .from(this.headerSecondary, 0.7, {autoAlpha:0, y: 50})
-        .staggerFrom( this.links , 0.2, { autoAlpha: 0, y: 20 }, 0.1)
-        .add(() => {this.setState({pageTo: null})} )
-
-      this.bodyTweenIn = new TimelineMax({ paused: true })
-        .to(this.headerSecondary, 0.2, {autoAlpha:0, y: 50})
-        .to(this.headerMain, 0.2, {autoAlpha:0, y: 50})
-        .staggerTo( this.links , 0.1, { autoAlpha: 0, y: 20 }, 0.1)
-        .staggerTo( this.cards , 0.5, { autoAlpha: 1, y: 20 }, 0.1)
-        .add(() => {this.setState({pageTo: null})} )
-
-      this.bodyTweenOut = new TimelineMax({ paused: true })
-        .staggerTo( this.cards , 0.2, { autoAlpha: 0, y: -20 }, 0.1)
-        .to(this.headerMain, 0.5, {autoAlpha:1, y: 0})
-        .to(this.headerSecondary, 0.5, {autoAlpha:1, y: 0})
-        .staggerTo( this.links , 0.2, { autoAlpha: 1, y: 0 }, 0.1)
-        .add(() => {this.setState({pageTo: null})} )
-      } else {
-        this.authenticate().then(() => {
-        const ele = document.getElementById('loading-screen')
-        if(ele){
-          // fade out
           ele.classList.add('available')
 
           setTimeout(() => {
@@ -168,23 +129,7 @@ class App extends Component {
             ele.outerHTML = '';
           }, 2000)
         }
-        })
-      }
-  }
-
-  handleScroll = (e) => {
-    e.preventDefault();
-    if(e.deltaY > 0 && this.state.pageTo === null && this.state.page !== 2) {
-      this.setState({
-        pageTo: 2,
-        page: 2
       })
-    } else if(e.deltaY < 0 && this.state.pageTo === null && this.state.page !== 1){
-      this.setState({
-        pageTo: 1,
-        page: 1
-      })
-    }
   }
 
   openCard = (index) => {
@@ -212,15 +157,14 @@ class App extends Component {
 
     return (
       <div id="master-wrapper" >
-        <Scene />
+        <Scene isMobile={this.isMobile} />
         <div id="header-main" ref={(i) => {this.headerMain = i}}>
-          <span>HI, I'M </span>
-          <span id="name">BRIAN</span>
+          <span id={this.isMobile? "name-mobile":"name"}>Brian Lee</span>
         </div>
         <div id="header-secondary" ref={(i) => {this.headerSecondary = i}}>
-          SOFTWARE DEVELOPER
+          
         </div>
-        {this.state.page===1 && !this.isMobile && <div className="mouse"><span></span></div>}
+        {/* {this.state.page===1 && !this.isMobile && <div className="mouse"><span></span></div>} */}
         <div id={this.isMobile? "mobile-icon-container":"icon-container"}>
           <a 
             href={resume} 
@@ -249,36 +193,6 @@ class App extends Component {
               <FiLinkedin />
             </div>
           </a>
-        </div>
-        <div className="page-indicator" style={{display: this.isMobile ? 'none' : 'flex'}}>
-          <span className={this.state.page===1 ? "active" : null}/>
-          <span className={this.state.page===2 ? "active" : null}/>
-        </div>
-        <div id={this.isMobile? "mobile-body" : "body"}>
-            <div ref={(ref) => {this.cards.push(ref)}}>
-              <span id="section-title">EXPERIENCE / PROJECTS</span>
-            </div>
-            
-            <div id="section-body">
-            {
-            this.data.map((element, index) => (
-              <div key={index} ref={(ref) => {this.cards.push(ref)}} className={this.state.showCard === index && "show-card"}>
-                <Card 
-                  src={element.src}
-                  imgWidth={element.srcWidth} 
-                  imgHeight={element.srcHeight} 
-                  title={element.title} 
-                  description={element.description}
-                  body={element.body}
-                  tools={element.tools}
-                  openCard={() => this.openCard(index)}
-                  closeCard={() => this.closeCard(index)}
-                  show={this.state.showCard === index}
-                  hide={this.state.showCard !== index && this.state.showCard !== null}
-                />
-              </div>
-            ))}
-            </div>
         </div>
       </div>
     );
